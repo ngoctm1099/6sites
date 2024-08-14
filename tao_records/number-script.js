@@ -7,14 +7,14 @@ const viewsPerMonthElement = document.getElementById("views-per-month");
 const subscribersEnd = 27.0;
 const hoursWatchedEnd = 39;
 const viewsPerMonthEnd = 150;
-const subscribersDuration = 3000; // 3 giây
-const hoursWatchedDuration = 5000; // 5 giây
-const viewsPerMonthDuration = 7000; // 7 giây
+const subscribersDuration = 5000;
+const hoursWatchedDuration = 5000;
+const viewsPerMonthDuration = 5000;
 
 // Tính toán bước nhảy cho mỗi lần cập nhật
-const subscribersStep = subscribersEnd / (subscribersDuration / 100);
-const hoursWatchedStep = hoursWatchedEnd / (hoursWatchedDuration / 100);
-const viewsPerMonthStep = viewsPerMonthEnd / (viewsPerMonthDuration / 100);
+const subscribersStep = subscribersEnd / (subscribersDuration / 10);
+const hoursWatchedStep = hoursWatchedEnd / (hoursWatchedDuration / 10);
+const viewsPerMonthStep = viewsPerMonthEnd / (viewsPerMonthDuration / 10);
 
 // Khởi tạo giá trị hiện tại
 let currentSubscribers = 0.0;
@@ -23,13 +23,20 @@ let currentViewsPerMonth = 0;
 
 // Hàm cập nhật giá trị
 function updateValues() {
-  currentSubscribers += subscribersStep;
-  currentHoursWatched += hoursWatchedStep;
-  currentViewsPerMonth += viewsPerMonthStep;
+  if (currentSubscribers < subscribersEnd) {
+    currentSubscribers += subscribersStep;
+    subscribersElement.textContent = currentSubscribers.toFixed(0) + "M";
+  }
 
-  subscribersElement.textContent = currentSubscribers.toFixed(1) + "M";
-  hoursWatchedElement.textContent = currentHoursWatched + "M";
-  viewsPerMonthElement.textContent = currentViewsPerMonth + "M";
+  if (currentHoursWatched < hoursWatchedEnd) {
+    currentHoursWatched += hoursWatchedStep;
+    hoursWatchedElement.textContent = currentHoursWatched.toFixed(0) + "M";
+  }
+
+  if (currentViewsPerMonth < viewsPerMonthEnd) {
+    currentViewsPerMonth += viewsPerMonthStep;
+    viewsPerMonthElement.textContent = currentViewsPerMonth.toFixed(0) + "M";
+  }
 }
 
 // Bắt đầu cập nhật
@@ -38,6 +45,12 @@ const hoursWatchedInterval = setInterval(updateValues, 10);
 const viewsPerMonthInterval = setInterval(updateValues, 10);
 
 // Dừng các interval khi đạt đến giá trị cuối cùng
-clearInterval(subscribersInterval, subscribersDuration);
-clearInterval(hoursWatchedInterval, hoursWatchedDuration);
-clearInterval(viewsPerMonthInterval, viewsPerMonthDuration);
+setTimeout(() => {
+  clearInterval(subscribersInterval);
+}, subscribersDuration);
+setTimeout(() => {
+  clearInterval(hoursWatchedInterval);
+}, hoursWatchedDuration);
+setTimeout(() => {
+  clearInterval(viewsPerMonthInterval);
+}, viewsPerMonthDuration);
